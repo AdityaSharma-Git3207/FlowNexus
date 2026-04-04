@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.teams',
     'apps.employees',
+    'apps.reports',
 ]
 
 MIDDLEWARE = [
