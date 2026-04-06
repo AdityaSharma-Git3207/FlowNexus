@@ -32,3 +32,5 @@ FlowNexus provides a centralized platform where employees submit daily work repo
 - daily reporting
 - manager dashboards
 - team management
+
+More Features Comming Soon.....
