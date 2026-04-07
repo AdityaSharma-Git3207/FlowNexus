@@ -1,12 +1,15 @@
-# Python cache
+# Python
 __pycache__/
 *.pyc
 
-# Virtual environment
+# Django
+db.sqlite3
+
+# Virtual environments
 venv/
 
-# Database
-db.sqlite3
+# Environment files
+.env
 
 # OS files
 .DS_Store
