@@ -6,6 +6,7 @@ from .views import (
     ManagerDashboardView,
     ReportStatusView,
     WeeklyReportSummaryView,
+    ReportDeadlineStatusView,
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path("dashboard/", ManagerDashboardView.as_view(), name="dashboard"),
     path("report-status/", ReportStatusView.as_view(), name="report-status"),
     path("weekly-summary/", WeeklyReportSummaryView.as_view(), name="weekly-summary"),
+    path("deadline-status/", ReportDeadlineStatusView.as_view(), name="deadline-status"),
 ]

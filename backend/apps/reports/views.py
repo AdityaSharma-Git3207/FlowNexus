@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from datetime import date
 from apps.employees.models import EmployeeProfile
-from datetime import timedelta
+from datetime import timedelta, time
 from django.utils.timezone import now
 
 
@@ -179,5 +179,55 @@ class WeeklyReportSummaryView(APIView):
             "employees_submitted": [e.user.username for e in submitted],
             "employees_missing": [e.user.username for e in missing],
         }
+
+        return Response(data)
+    
+
+
+class ReportDeadlineStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        if not request.user.managed_teams.exists():
+            return Response(
+                {"error": "This user is not a manager"},
+                status=403
+            )
+
+        teams = request.user.managed_teams.all()
+
+        employees = EmployeeProfile.objects.filter(team__in=teams)
+
+        today = now().date()
+
+        reports_today = DailyReport.objects.filter(
+            employee__in=employees,
+            created_at__date=today
+        )
+
+        data = []
+
+        for employee in employees:
+
+            report = reports_today.filter(employee=employee).first()
+
+            if not report:
+                status = "missing"
+
+            else:
+                deadline = employee.team.deadline if employee.team else time(18, 0)
+                submitted_time = report.created_at.time()
+
+                if submitted_time <= deadline:
+                    status = "on_time"
+                else:
+                    status = "late"
+
+            data.append({
+                "employee": employee.user.username,
+                "team": employee.team.name if employee.team else None,
+                "status": status
+            })
 
         return Response(data)
