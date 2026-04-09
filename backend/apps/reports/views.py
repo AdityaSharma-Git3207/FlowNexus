@@ -23,7 +23,7 @@ class DailyReportListCreateView(generics.ListCreateAPIView):
         if not hasattr(self.request.user, "employee_profile"):
             raise PermissionDenied("User is not an employee")
 
-        serializer.save(employee=self.request.user.employe_profile)
+        serializer.save(employee=self.request.user.employee_profile)
 
 
 class MyReportsView(APIView):
