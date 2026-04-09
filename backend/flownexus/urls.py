@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 
 urlpatterns = [
@@ -28,4 +29,7 @@ urlpatterns = [
     path('api/', include('apps.reports.urls')),
     path("api/", include("apps.teams.urls")), 
     path("api/", include("apps.employees.urls")),
+
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema", url="/api/schema/?format=json")),
 ]
