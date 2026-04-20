@@ -4,3 +4,8 @@ export const submitReport = async (reportData) => {
   const response = await api.post("reports/", reportData);
   return response.data;
 };
+
+export const getMyReports = async () => {
+  const response = await api.get("my-reports/");
+  return response.data;
+};

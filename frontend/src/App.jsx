@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/dashboard";
 import SubmitReport from "./pages/SubmitReport";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import MyReports from "./pages/MyReports";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/submit-report" element={<SubmitReport />} />
+        <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+        <Route path="/my-reports" element={<MyReports />} />
       </Routes>
     </BrowserRouter>
   );

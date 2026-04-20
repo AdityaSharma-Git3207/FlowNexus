@@ -88,19 +88,27 @@ class ManagerDashboardView(APIView):
         )
 
         submitted_employee_ids = reports_today.values_list(
-            "employee_id", flat=True
+            "employee_id",
+            flat=True
+        ).distinct()
+
+        submitted_employees = employees.filter(
+            id__in=submitted_employee_ids
         )
 
-        submitted_employees = employees.filter(id__in=submitted_employee_ids)
-        missing_employees = employees.exclude(id__in=submitted_employee_ids)
+        missing_employees = employees.exclude(
+            id__in=submitted_employee_ids
+        )
 
         data = {
             "team_size": employees.count(),
             "submitted_today": submitted_employees.count(),
             "missing_reports": missing_employees.count(),
+
             "submitted_employees": [
                 e.user.username for e in submitted_employees
             ],
+
             "missing_employees": [
                 e.user.username for e in missing_employees
             ],
@@ -131,7 +139,10 @@ class ReportStatusView(APIView):
             created_at__date=today
         )
 
-        submitted_ids = reports_today.values_list("employee_id", flat=True)
+        submitted_ids = reports_today.values_list(
+            "employee_id",
+            flat=True
+        )
 
         data = []
 
@@ -168,7 +179,10 @@ class WeeklyReportSummaryView(APIView):
             created_at__date__gte=week_start
         )
 
-        submitted_ids = reports.values_list("employee_id", flat=True).distinct()
+        submitted_ids = reports.values_list(
+            "employee_id",
+            flat=True
+        ).distinct()
 
         submitted = employees.filter(id__in=submitted_ids)
         missing = employees.exclude(id__in=submitted_ids)
@@ -176,12 +190,15 @@ class WeeklyReportSummaryView(APIView):
         data = {
             "week_start": week_start,
             "total_reports": reports.count(),
-            "employees_submitted": [e.user.username for e in submitted],
-            "employees_missing": [e.user.username for e in missing],
+            "employees_submitted": [
+                e.user.username for e in submitted
+            ],
+            "employees_missing": [
+                e.user.username for e in missing
+            ],
         }
 
         return Response(data)
-    
 
 
 class ReportDeadlineStatusView(APIView):
@@ -210,13 +227,20 @@ class ReportDeadlineStatusView(APIView):
 
         for employee in employees:
 
-            report = reports_today.filter(employee=employee).first()
+            report = reports_today.filter(
+                employee=employee
+            ).first()
 
             if not report:
                 status = "missing"
 
             else:
-                deadline = employee.team.deadline if employee.team else time(18, 0)
+                deadline = (
+                    employee.team.deadline
+                    if employee.team
+                    else time(18, 0)
+                )
+
                 submitted_time = report.created_at.time()
 
                 if submitted_time <= deadline:
