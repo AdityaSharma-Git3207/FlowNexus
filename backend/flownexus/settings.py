@@ -26,8 +26,11 @@ SECRET_KEY = 'django-insecure-$x^f6wo99gb*+&68vzsw+fbwlm4hajjxgw_chrj@ttz1o+fmza
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+import os 
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,flownexus-backend.onrender.com"
+).split(",")
 
 # Application definition
 
