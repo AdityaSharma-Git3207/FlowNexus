@@ -14,7 +14,7 @@ function SubmitReport() {
       await submitReport({
         report_date,
         tasks_done,
-        hours_worked,
+        hours_worked: Number(hours_worked),
       });
 
       alert("Report submitted successfully!");
@@ -22,7 +22,8 @@ function SubmitReport() {
       setDate("");
       setTasks("");
       setHours("");
-    } catch {
+    } catch (error) {
+      console.log(error.response?.data || error);
       alert("Submission failed");
     }
   };
@@ -35,7 +36,7 @@ function SubmitReport() {
           <p style={styles.tag}>Employee Workspace</p>
           <h1 style={styles.title}>Daily Report</h1>
           <p style={styles.sub}>
-            Submit your completed work for today.
+            Submit completed work, blockers and progress for today.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -73,13 +74,13 @@ function SubmitReport() {
           </form>
         </div>
 
-        {/* Side Info */}
+        {/* Side Cards */}
         <div style={styles.sideWrap}>
           <div style={styles.sideCard}>
             <p style={styles.sideLabel}>Today's Focus</p>
             <h3 style={styles.sideTitle}>Consistent Reporting</h3>
             <p style={styles.sideText}>
-              Daily updates help managers track progress,
+              Daily updates help managers track execution,
               blockers, and delivery timelines.
             </p>
           </div>
@@ -87,8 +88,16 @@ function SubmitReport() {
           <div style={styles.sideCard}>
             <p style={styles.sideLabel}>Best Practice</p>
             <p style={styles.sideText}>
-              Keep reports concise and outcome-based.
-              Mention key tasks completed and any blockers.
+              Keep reports concise and outcome-driven.
+              Mention key wins and blockers clearly.
+            </p>
+          </div>
+
+          <div style={styles.sideCard}>
+            <p style={styles.sideLabel}>Reminder</p>
+            <p style={styles.sideText}>
+              Strong reporting builds trust, visibility,
+              and ownership across teams.
             </p>
           </div>
         </div>
@@ -101,52 +110,56 @@ const styles = {
   grid: {
     display: "grid",
     gridTemplateColumns: "2fr 1fr",
-    gap: "24px",
+    gap: "26px",
     alignItems: "start",
   },
 
   panel: {
-    padding: "28px",
-    borderRadius: "18px",
-    background: "rgba(255,255,255,0.04)",
+    padding: "34px",
+    borderRadius: "28px",
+    background: "#121212",
     border: "1px solid rgba(255,255,255,0.06)",
-    backdropFilter: "blur(10px)",
+    boxShadow: "0 18px 40px rgba(0,0,0,0.28)",
   },
 
   tag: {
     margin: 0,
-    color: "#22d3ee",
+    color: "#e7dcc7",
     fontSize: "13px",
-    fontWeight: "600",
+    fontWeight: "700",
+    letterSpacing: "0.4px",
+    textTransform: "uppercase",
   },
 
   title: {
-    margin: "10px 0 8px 0",
-    fontSize: "34px",
-    fontWeight: "700",
+    margin: "12px 0 10px",
+    fontSize: "42px",
+    fontWeight: "900",
+    color: "#ffffff",
+    lineHeight: 1,
   },
 
   sub: {
-    margin: "0 0 24px 0",
-    color: "#94a3b8",
+    margin: "0 0 26px",
+    color: "#9ca3af",
     fontSize: "14px",
   },
 
   label: {
     display: "block",
     marginBottom: "8px",
-    marginTop: "14px",
+    marginTop: "18px",
     fontSize: "14px",
-    color: "#cbd5e1",
-    fontWeight: "500",
+    color: "#d4d4d4",
+    fontWeight: "600",
   },
 
   input: {
     width: "100%",
-    padding: "14px",
-    borderRadius: "12px",
-    border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(255,255,255,0.03)",
+    padding: "15px 16px",
+    borderRadius: "16px",
+    border: "1px solid #2a2a2a",
+    background: "#181818",
     color: "white",
     fontSize: "14px",
     outline: "none",
@@ -154,28 +167,30 @@ const styles = {
 
   textarea: {
     width: "100%",
-    height: "160px",
-    padding: "14px",
+    minHeight: "190px",
+    padding: "16px",
     resize: "vertical",
-    borderRadius: "12px",
-    border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(255,255,255,0.03)",
+    borderRadius: "16px",
+    border: "1px solid #2a2a2a",
+    background: "#181818",
     color: "white",
     fontSize: "14px",
     outline: "none",
+    lineHeight: "1.6",
   },
 
   button: {
     width: "100%",
-    marginTop: "22px",
-    padding: "14px",
-    borderRadius: "12px",
+    marginTop: "26px",
+    padding: "16px",
+    borderRadius: "18px",
     border: "none",
-    background: "#22d3ee",
-    color: "#0f172a",
-    fontWeight: "700",
+    background: "#e7dcc7",
+    color: "#111111",
+    fontWeight: "800",
     fontSize: "15px",
     cursor: "pointer",
+    boxShadow: "0 10px 24px rgba(231,220,199,0.12)",
   },
 
   sideWrap: {
@@ -185,29 +200,34 @@ const styles = {
   },
 
   sideCard: {
-    padding: "22px",
-    borderRadius: "18px",
-    background: "rgba(255,255,255,0.04)",
+    padding: "24px",
+    borderRadius: "24px",
+    background: "#121212",
     border: "1px solid rgba(255,255,255,0.06)",
+    boxShadow: "0 14px 32px rgba(0,0,0,0.24)",
   },
 
   sideLabel: {
     margin: 0,
-    color: "#22d3ee",
-    fontSize: "13px",
-    fontWeight: "600",
+    color: "#e7dcc7",
+    fontSize: "12px",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: "0.4px",
   },
 
   sideTitle: {
-    margin: "10px 0",
-    fontSize: "22px",
+    margin: "12px 0 10px",
+    fontSize: "26px",
+    fontWeight: "800",
+    color: "#ffffff",
   },
 
   sideText: {
     margin: 0,
-    color: "#94a3b8",
+    color: "#9ca3af",
     fontSize: "14px",
-    lineHeight: "1.6",
+    lineHeight: "1.7",
   },
 };
 

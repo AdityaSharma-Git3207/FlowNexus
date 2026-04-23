@@ -23,93 +23,138 @@ function MyReports() {
 
   return (
     <AppLayout title="My Reports" role="Employee">
-      <div style={styles.panel}>
-        <h2 style={styles.title}>Submitted Reports</h2>
-
-        <p style={styles.sub}>
-          Review all your submitted daily reports.
-        </p>
-
-        {loading ? (
-          <p style={styles.message}>Loading reports...</p>
-        ) : reports.length === 0 ? (
-          <p style={styles.message}>
-            No reports submitted yet.
+      <div style={styles.wrapper}>
+        {/* Header */}
+        <div style={styles.hero}>
+          <p style={styles.eyebrow}>EMPLOYEE HISTORY</p>
+          <h2 style={styles.title}>Submitted Reports</h2>
+          <p style={styles.sub}>
+            Review all your completed daily submissions, hours logged and work
+            summaries.
           </p>
-        ) : (
-          <div style={styles.list}>
-            {reports.map((item, index) => (
-              <div key={index} style={styles.card}>
-                <div style={styles.top}>
-                  <span>{item.report_date}</span>
-                  <span>{item.hours_worked} hrs</span>
-                </div>
+        </div>
 
-                <p style={styles.task}>
-                  {item.tasks_done}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Body */}
+        <div style={styles.panel}>
+          {loading ? (
+            <p style={styles.message}>Loading reports...</p>
+          ) : reports.length === 0 ? (
+            <p style={styles.message}>No reports submitted yet.</p>
+          ) : (
+            <div style={styles.list}>
+              {reports.map((item, index) => (
+                <div key={index} style={styles.card}>
+                  <div style={styles.topRow}>
+                    <span style={styles.date}>{item.report_date}</span>
+
+                    <span style={styles.badge}>
+                      {item.hours_worked} hrs
+                    </span>
+                  </div>
+
+                  <p style={styles.task}>{item.tasks_done}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </AppLayout>
   );
 }
 
 const styles = {
-  panel: {
-    padding: "24px",
-    borderRadius: "18px",
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.06)",
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "22px",
+  },
+
+  hero: {
+    padding: "10px 4px",
+  },
+
+  eyebrow: {
+    margin: 0,
+    fontSize: "12px",
+    letterSpacing: "1px",
+    fontWeight: "700",
+    color: "#d6cbb5",
   },
 
   title: {
-    margin: 0,
-    fontSize: "28px",
+    margin: "8px 0 6px",
+    fontSize: "42px",
+    fontWeight: "800",
+    color: "#ffffff",
+    lineHeight: "1.1",
   },
 
   sub: {
-    marginTop: "6px",
+    margin: 0,
+    fontSize: "15px",
     color: "#94a3b8",
-    fontSize: "14px",
-    marginBottom: "22px",
+    maxWidth: "700px",
+    lineHeight: "1.7",
+  },
+
+  panel: {
+    padding: "28px",
+    borderRadius: "24px",
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(255,255,255,0.07)",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
   },
 
   message: {
     color: "#94a3b8",
     fontSize: "15px",
-    marginTop: "14px",
+    margin: 0,
   },
 
   list: {
     display: "flex",
     flexDirection: "column",
-    gap: "14px",
+    gap: "16px",
   },
 
   card: {
-    padding: "18px",
-    borderRadius: "14px",
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.05)",
+    padding: "22px",
+    borderRadius: "18px",
+    background: "rgba(255,255,255,0.025)",
+    border: "1px solid rgba(255,255,255,0.06)",
+    transition: "0.25s ease",
   },
 
-  top: {
+  topRow: {
     display: "flex",
     justifyContent: "space-between",
-    color: "#22d3ee",
-    fontSize: "14px",
-    marginBottom: "10px",
-    gap: "12px",
+    alignItems: "center",
+    gap: "14px",
     flexWrap: "wrap",
+    marginBottom: "14px",
+  },
+
+  date: {
+    color: "#ffffff",
+    fontWeight: "700",
+    fontSize: "15px",
+  },
+
+  badge: {
+    padding: "8px 14px",
+    borderRadius: "999px",
+    background: "#d6cbb5",
+    color: "#000000",
+    fontWeight: "700",
+    fontSize: "13px",
   },
 
   task: {
     margin: 0,
-    color: "white",
-    lineHeight: "1.5",
+    color: "#cbd5e1",
+    lineHeight: "1.8",
+    fontSize: "15px",
   },
 };
 

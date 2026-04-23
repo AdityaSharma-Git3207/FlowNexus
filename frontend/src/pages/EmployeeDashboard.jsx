@@ -30,24 +30,24 @@ function EmployeeDashboard() {
         </Link>
       </div>
 
-      {/* KPI */}
+      {/* KPI Cards */}
       <div style={styles.grid}>
         <Card title="Today's Status" value="Pending" />
         <Card title="Reports This Week" value="4" />
         <Card title="Hours Logged" value="32h" />
       </div>
 
-      {/* Chart */}
+      {/* Weekly Activity */}
       <div style={styles.panel}>
         <h3 style={styles.heading}>Weekly Activity</h3>
         <p style={styles.sub}>Your working hours this week</p>
 
         <div style={styles.chartWrap}>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={230}>
             <BarChart data={weeklyData}>
               <XAxis
                 dataKey="day"
-                tick={{ fill: "#94a3b8", fontSize: 12 }}
+                tick={{ fill: "#8f8a80", fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
               />
@@ -60,8 +60,8 @@ function EmployeeDashboard() {
 
               <Bar
                 dataKey="hours"
-                fill="#22d3ee"
-                radius={[6, 6, 0, 0]}
+                fill="#e7dcc7"
+                radius={[10, 10, 0, 0]}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -104,100 +104,110 @@ const styles = {
   topActions: {
     display: "flex",
     justifyContent: "flex-end",
-    gap: 12,
-    marginBottom: 24,
+    gap: 14,
+    marginBottom: 26,
     flexWrap: "wrap",
   },
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-    gap: 20,
-    marginBottom: 24,
+    gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
+    gap: 22,
+    marginBottom: 28,
   },
 
   card: {
-    padding: 24,
-    borderRadius: 16,
-    background: "rgba(255,255,255,0.04)",
+    padding: 28,
+    borderRadius: 24,
+    background: "#121212",
     border: "1px solid rgba(255,255,255,0.06)",
+    boxShadow: "0 12px 28px rgba(0,0,0,0.28)",
   },
 
   label: {
-    color: "#94a3b8",
+    color: "#8f8a80",
     fontSize: 13,
     margin: 0,
   },
 
   value: {
-    margin: "10px 0 0",
-    fontSize: 32,
+    margin: "14px 0 0",
+    fontSize: 46,
+    lineHeight: 1,
+    fontWeight: 800,
+    color: "#f5f5f5",
   },
 
   panel: {
-    padding: 24,
-    borderRadius: 16,
-    background: "rgba(255,255,255,0.04)",
+    padding: 30,
+    borderRadius: 28,
+    background: "#121212",
     border: "1px solid rgba(255,255,255,0.06)",
-    marginBottom: 24,
+    boxShadow: "0 14px 32px rgba(0,0,0,0.28)",
+    marginBottom: 28,
   },
 
   heading: {
     margin: 0,
-    fontSize: 18,
-    fontWeight: 600,
+    fontSize: 20,
+    fontWeight: 800,
+    color: "#ffffff",
   },
 
   sub: {
-    margin: "6px 0 0",
-    color: "#94a3b8",
+    margin: "8px 0 0",
+    color: "#8f8a80",
     fontSize: 13,
   },
 
   chartWrap: {
-    marginTop: 14,
+    marginTop: 22,
   },
 
   tooltip: {
-    background: "#0f172a",
+    background: "#1b1b1b",
     border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "10px",
-    color: "white",
+    borderRadius: "12px",
+    color: "#fff",
     fontSize: "13px",
   },
 
   tooltipLabel: {
-    color: "#94a3b8",
+    color: "#8f8a80",
   },
 
   primaryBtn: {
     textDecoration: "none",
-    padding: "12px 16px",
-    borderRadius: 10,
-    background: "#22d3ee",
-    color: "#0f172a",
-    fontWeight: 600,
+    padding: "14px 20px",
+    borderRadius: 14,
+    background: "#e7dcc7",
+    color: "#111",
+    fontWeight: 700,
+    fontSize: 14,
   },
 
   secondaryBtn: {
     textDecoration: "none",
-    padding: "12px 16px",
-    borderRadius: 10,
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.06)",
-    color: "white",
+    padding: "14px 20px",
+    borderRadius: 14,
+    background: "#181818",
+    border: "1px solid rgba(255,255,255,0.08)",
+    color: "#f5f5f5",
+    fontWeight: 600,
+    fontSize: 14,
   },
 
   row: {
-    padding: 14,
-    borderRadius: 12,
-    background: "rgba(255,255,255,0.03)",
-    marginTop: 12,
+    padding: 18,
+    borderRadius: 18,
+    background: "#191919",
+    marginTop: 14,
+    border: "1px solid rgba(255,255,255,0.05)",
   },
 
   rowText: {
-    margin: "6px 0 0",
-    color: "#94a3b8",
+    margin: "7px 0 0",
+    color: "#8f8a80",
     fontSize: 13,
   },
 };

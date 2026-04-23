@@ -5,9 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from datetime import date
+from datetime import date, timedelta, time
 from apps.employees.models import EmployeeProfile
-from datetime import timedelta, time
 from django.utils.timezone import now
 
 
@@ -19,7 +18,6 @@ class DailyReportListCreateView(generics.ListCreateAPIView):
         return DailyReport.objects.all()
 
     def perform_create(self, serializer):
-
         if not hasattr(self.request.user, "employee_profile"):
             raise PermissionDenied("User is not an employee")
 
@@ -30,7 +28,6 @@ class MyReportsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not hasattr(request.user, "employee_profile"):
             return Response(
                 {"error": "This user is not an employee"},
@@ -48,7 +45,6 @@ class TeamReportsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not request.user.managed_teams.exists():
             return Response(
                 {"error": "This user is not a manager"},
@@ -69,7 +65,6 @@ class ManagerDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not request.user.managed_teams.exists():
             return Response(
                 {"error": "This user is not a manager"},
@@ -77,14 +72,13 @@ class ManagerDashboardView(APIView):
             )
 
         teams = request.user.managed_teams.all()
-
         employees = EmployeeProfile.objects.filter(team__in=teams)
 
         today = date.today()
 
         reports_today = DailyReport.objects.filter(
             employee__in=employees,
-            created_at__date=today
+            report_date=today
         )
 
         submitted_employee_ids = reports_today.values_list(
@@ -104,11 +98,9 @@ class ManagerDashboardView(APIView):
             "team_size": employees.count(),
             "submitted_today": submitted_employees.count(),
             "missing_reports": missing_employees.count(),
-
             "submitted_employees": [
                 e.user.username for e in submitted_employees
             ],
-
             "missing_employees": [
                 e.user.username for e in missing_employees
             ],
@@ -121,7 +113,6 @@ class ReportStatusView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not request.user.managed_teams.exists():
             return Response(
                 {"error": "This user is not a manager"},
@@ -129,14 +120,13 @@ class ReportStatusView(APIView):
             )
 
         teams = request.user.managed_teams.all()
-
         employees = EmployeeProfile.objects.filter(team__in=teams)
 
         today = date.today()
 
         reports_today = DailyReport.objects.filter(
             employee__in=employees,
-            created_at__date=today
+            report_date=today
         )
 
         submitted_ids = reports_today.values_list(
@@ -160,7 +150,6 @@ class WeeklyReportSummaryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not request.user.managed_teams.exists():
             return Response(
                 {"error": "This user is not a manager"},
@@ -168,7 +157,6 @@ class WeeklyReportSummaryView(APIView):
             )
 
         teams = request.user.managed_teams.all()
-
         employees = EmployeeProfile.objects.filter(team__in=teams)
 
         today = now().date()
@@ -176,7 +164,7 @@ class WeeklyReportSummaryView(APIView):
 
         reports = DailyReport.objects.filter(
             employee__in=employees,
-            created_at__date__gte=week_start
+            report_date__gte=week_start
         )
 
         submitted_ids = reports.values_list(
@@ -205,7 +193,6 @@ class ReportDeadlineStatusView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
         if not request.user.managed_teams.exists():
             return Response(
                 {"error": "This user is not a manager"},
@@ -213,27 +200,24 @@ class ReportDeadlineStatusView(APIView):
             )
 
         teams = request.user.managed_teams.all()
-
         employees = EmployeeProfile.objects.filter(team__in=teams)
 
         today = now().date()
 
         reports_today = DailyReport.objects.filter(
             employee__in=employees,
-            created_at__date=today
+            report_date=today
         )
 
         data = []
 
         for employee in employees:
-
             report = reports_today.filter(
                 employee=employee
             ).first()
 
             if not report:
                 status = "missing"
-
             else:
                 deadline = (
                     employee.team.deadline

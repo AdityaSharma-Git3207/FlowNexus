@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
-import logo from "../assets/favicon.png"; // 👈 your logo file
+import logo from "../assets/favicon.png";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -39,9 +39,14 @@ function Login() {
 
   return (
     <div style={styles.page}>
+      <div style={styles.mesh}></div>
+      <div style={styles.glowLeft}></div>
+      <div style={styles.glowRight}></div>
+      <div style={styles.glowTop}></div>
+      <div style={styles.glowBottom}></div>
+      <div style={styles.centerAura}></div>
+
       <div style={styles.card}>
-        
-        {/* 🔥 BRAND ROW */}
         <div style={styles.brandRow}>
           <img src={logo} alt="logo" style={styles.logo} />
 
@@ -52,7 +57,8 @@ function Login() {
         </div>
 
         <p style={styles.sub}>
-          Smart employee reporting & team intelligence
+          Premium workforce reporting platform for teams, managers and
+          execution visibility.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -71,14 +77,11 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button style={styles.button}>
-            Access Workspace
-          </button>
+          <button style={styles.button}>Access Workspace</button>
         </form>
 
-        {/* Demo Access */}
         <div style={styles.demoBox}>
-          <p style={styles.demoTitle}>Demo Access</p>
+          <p style={styles.demoTitle}>Quick Demo Access</p>
 
           <div style={styles.demoRow}>
             <div>
@@ -86,18 +89,18 @@ function Login() {
               <p style={styles.cred}>admin / adminlogin</p>
             </div>
 
-            <button style={styles.demoBtn} onClick={fillManager} type="button">
+            <button type="button" style={styles.demoBtn} onClick={fillManager}>
               Use
             </button>
           </div>
 
-          <div style={styles.demoRow}>
+          <div style={styles.demoRowLast}>
             <div>
               <p style={styles.role}>Employee</p>
               <p style={styles.cred}>employee1 / employee123</p>
             </div>
 
-            <button style={styles.demoBtn} onClick={fillEmployee} type="button">
+            <button type="button" style={styles.demoBtn} onClick={fillEmployee}>
               Use
             </button>
           </div>
@@ -113,63 +116,145 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background:
-      "radial-gradient(circle at top right, #1e3a8a, #020617 55%)",
+    padding: "24px",
     fontFamily: "Inter, sans-serif",
-    color: "white",
-    padding: "20px",
+    position: "relative",
+    overflow: "hidden",
+    background: `
+      radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 34%),
+      linear-gradient(135deg, #020202 0%, #050505 45%, #020202 100%)
+    `,
+  },
+
+  mesh: {
+    position: "absolute",
+    inset: 0,
+    background: `
+      radial-gradient(circle at 20% 20%, rgba(59,130,246,0.05), transparent 22%),
+      radial-gradient(circle at 80% 20%, rgba(214,203,181,0.05), transparent 22%),
+      radial-gradient(circle at 20% 80%, rgba(214,203,181,0.04), transparent 22%),
+      radial-gradient(circle at 80% 80%, rgba(59,130,246,0.04), transparent 22%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02), transparent 30%)
+    `,
+  },
+
+  glowLeft: {
+    position: "absolute",
+    width: "420px",
+    height: "420px",
+    borderRadius: "50%",
+    background: "rgba(59,130,246,0.05)",
+    filter: "blur(180px)",
+    left: "-140px",
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
+
+  glowRight: {
+    position: "absolute",
+    width: "420px",
+    height: "420px",
+    borderRadius: "50%",
+    background: "rgba(214,203,181,0.05)",
+    filter: "blur(180px)",
+    right: "-140px",
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
+
+  glowTop: {
+    position: "absolute",
+    width: "360px",
+    height: "360px",
+    borderRadius: "50%",
+    background: "rgba(214,203,181,0.035)",
+    filter: "blur(160px)",
+    top: "-180px",
+    left: "50%",
+    transform: "translateX(-50%)",
+  },
+
+  glowBottom: {
+    position: "absolute",
+    width: "360px",
+    height: "360px",
+    borderRadius: "50%",
+    background: "rgba(59,130,246,0.035)",
+    filter: "blur(160px)",
+    bottom: "-180px",
+    left: "50%",
+    transform: "translateX(-50%)",
+  },
+
+  centerAura: {
+    position: "absolute",
+    width: "420px",
+    height: "420px",
+    borderRadius: "50%",
+    background: "rgba(214,203,181,0.03)",
+    filter: "blur(170px)",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
 
   card: {
     width: "100%",
-    maxWidth: "440px",
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.1)",
-    borderRadius: "24px",
-    padding: "32px",
-    backdropFilter: "blur(16px)",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+    maxWidth: "470px",
+    padding: "36px",
+    borderRadius: "28px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.07)",
+    boxShadow: "0 40px 100px rgba(0,0,0,0.65)",
+    backdropFilter: "blur(18px)",
+    color: "white",
+    position: "relative",
+    zIndex: 2,
   },
 
-  /* 🔥 NEW */
   brandRow: {
     display: "flex",
     alignItems: "center",
     gap: "14px",
-    marginBottom: "10px",
+    marginBottom: "14px",
   },
 
   logo: {
-    width: "48px",
-    height: "48px",
+    width: "54px",
+    height: "54px",
     objectFit: "contain",
   },
 
   tag: {
-    color: "#22d3ee",
-    fontSize: "14px",
     margin: 0,
+    fontSize: "13px",
+    letterSpacing: "0.6px",
+    color: "#d6cbb5",
+    fontWeight: "700",
   },
 
   title: {
-    fontSize: "36px",
-    fontWeight: "700",
-    margin: "2px 0 0 0",
+    margin: "4px 0 0",
+    fontSize: "44px",
+    lineHeight: "1",
+    fontWeight: "800",
+    color: "#ffffff",
   },
 
   sub: {
+    margin: "10px 0 28px",
     color: "#94a3b8",
-    marginBottom: "28px",
-    lineHeight: "1.5",
+    lineHeight: "1.7",
+    fontSize: "15px",
   },
 
   input: {
     width: "100%",
-    padding: "14px",
+    padding: "15px 16px",
     marginBottom: "14px",
-    borderRadius: "12px",
-    border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.04)",
+    borderRadius: "14px",
+    border: "1px solid rgba(255,255,255,0.07)",
+    background: "rgba(255,255,255,0.03)",
     color: "white",
     outline: "none",
     fontSize: "15px",
@@ -177,59 +262,69 @@ const styles = {
 
   button: {
     width: "100%",
-    padding: "14px",
-    borderRadius: "12px",
+    marginTop: "4px",
+    padding: "15px",
+    borderRadius: "14px",
     border: "none",
-    background: "#22d3ee",
-    color: "#0f172a",
-    fontWeight: "700",
-    cursor: "pointer",
-    marginTop: "6px",
+    background: "#d6cbb5",
+    color: "#050505",
+    fontWeight: "800",
     fontSize: "15px",
+    cursor: "pointer",
+    boxShadow: "0 16px 40px rgba(214,203,181,0.18)",
   },
 
   demoBox: {
-    marginTop: "22px",
+    marginTop: "24px",
     padding: "18px",
-    borderRadius: "16px",
-    background: "rgba(255,255,255,0.04)",
+    borderRadius: "18px",
+    background: "rgba(255,255,255,0.025)",
     border: "1px solid rgba(255,255,255,0.06)",
   },
 
   demoTitle: {
-    margin: "0 0 14px 0",
-    fontSize: "14px",
-    color: "#22d3ee",
-    fontWeight: "600",
+    margin: "0 0 14px",
+    fontSize: "13px",
+    fontWeight: "700",
+    color: "#d6cbb5",
+    letterSpacing: "0.6px",
   },
 
   demoRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "10px 0",
-    borderBottom: "1px solid rgba(255,255,255,0.05)",
+    paddingBottom: "14px",
+    marginBottom: "14px",
+    borderBottom: "1px solid rgba(255,255,255,0.06)",
+  },
+
+  demoRowLast: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 
   role: {
     margin: 0,
-    fontSize: "14px",
-    fontWeight: "600",
+    fontWeight: "700",
+    fontSize: "15px",
+    color: "#ffffff",
   },
 
   cred: {
-    margin: "4px 0 0 0",
+    margin: "5px 0 0",
     fontSize: "13px",
     color: "#94a3b8",
   },
 
   demoBtn: {
-    padding: "8px 14px",
-    borderRadius: "10px",
-    border: "none",
-    background: "rgba(34,211,238,0.12)",
-    color: "#22d3ee",
-    fontWeight: "600",
+    padding: "10px 16px",
+    borderRadius: "12px",
+    border: "1px solid rgba(255,255,255,0.06)",
+    background: "rgba(255,255,255,0.03)",
+    color: "#d6cbb5",
+    fontWeight: "700",
     cursor: "pointer",
   },
 };

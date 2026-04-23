@@ -47,298 +47,274 @@ function Dashboard() {
 
   return (
     <AppLayout title="Manager Dashboard" role="Manager">
-      {/* KPI */}
-      <div style={styles.grid}>
-        <Card title="Team Size" value={data.team_size} />
-        <Card title="Submitted Today" value={data.submitted_today} />
-        <Card title="Missing Reports" value={data.missing_reports} />
-      </div>
+      <div style={styles.page}>
+        <div style={styles.grid}>
+          <Card title="Team Size" value={data.team_size} />
+          <Card title="Submitted Today" value={data.submitted_today} />
+          <Card title="Missing Reports" value={data.missing_reports} />
+        </div>
 
-      {/* Charts */}
-      <div style={styles.chartGrid}>
-        {/* PIE */}
-        <div style={styles.panel}>
-          <h3 style={styles.panelTitle}>Submission Status</h3>
-          <p style={styles.panelSub}>Today's completion overview</p>
+        <div style={styles.chartGrid}>
+          <div style={styles.panel}>
+            <h3 style={styles.panelTitle}>Submission Status</h3>
+            <p style={styles.panelSub}>Today's completion overview</p>
 
-          <div style={styles.chartWrap}>
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={280}>
               <PieChart>
                 <Pie
                   data={pieData}
-                  innerRadius={65}
-                  outerRadius={90}
-                  paddingAngle={4}
+                  innerRadius={82}
+                  outerRadius={112}
+                  paddingAngle={3}
                   dataKey="value"
                 >
-                  <Cell fill="#22d3ee" />
-                  <Cell fill="#f87171" />
+                  <Cell fill="#e7dcc7" />
+                  <Cell fill="#2b2b2b" />
                 </Pie>
-
-                <Tooltip
-                  contentStyle={styles.tooltip}
-                  labelStyle={styles.tooltipLabel}
-                />
+                <Tooltip contentStyle={styles.tooltip} />
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
 
-        {/* BAR */}
-        <div style={styles.panel}>
-          <h3 style={styles.panelTitle}>Weekly Reports</h3>
-          <p style={styles.panelSub}>Team submissions trend</p>
+          <div style={styles.panel}>
+            <h3 style={styles.panelTitle}>Weekly Reports</h3>
+            <p style={styles.panelSub}>Team submissions trend</p>
 
-          <div style={styles.chartWrap}>
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={280}>
               <BarChart data={weeklyData}>
                 <XAxis
                   dataKey="day"
-                  tick={{ fill: "#94a3b8", fontSize: 12 }}
                   axisLine={false}
                   tickLine={false}
+                  tick={{ fill: "#8b8b8b", fontSize: 12 }}
                 />
-
-                {/* 🔥 FIXED TOOLTIP ONLY */}
                 <Tooltip
-                  cursor={{ fill: "transparent" }}   // ❌ removes grey hover box
+                  cursor={{ fill: "transparent" }}
                   contentStyle={styles.tooltip}
-                  labelStyle={styles.tooltipLabel}
                 />
-
-                {/* ✅ KEEP BROAD BARS */}
                 <Bar
                   dataKey="reports"
-                  fill="#22d3ee"
-                  radius={[6, 6, 0, 0]}
+                  fill="#e7dcc7"
+                  radius={[12, 12, 0, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
 
-      <div style={styles.panel}>
-    <div style={styles.panelHeader}>
-      <div>
-        <h3 style={styles.panelTitle}>Submitted Today</h3>
-        <p style={styles.panelSub}>
-          Employees who submitted reports
-        </p>
-      </div>
+        <Section
+          title="Submitted Today"
+          sub="Employees who submitted reports"
+          count={data.submitted_employees.length}
+          empty="No reports submitted yet."
+          items={data.submitted_employees}
+          tag="Submitted"
+        />
 
-      <span style={styles.count}>
-        {data.submitted_employees.length}
-      </span>
+        <Section
+          title="Pending Submissions"
+          sub="Employees who haven’t submitted today"
+          count={data.missing_employees.length}
+          empty="All reports submitted for today."
+          items={data.missing_employees}
+          tag="Pending"
+          muted
+        />
+      </div>
+    </AppLayout>
+  );
+}
+
+function Card({ title, value }) {
+  return (
+    <div style={styles.card}>
+      <p style={styles.cardTitle}>{title}</p>
+      <h2 style={styles.cardValue}>{value}</h2>
     </div>
+  );
+}
 
-    {data.submitted_employees.length === 0 ? (
-      <div style={styles.success}>
-        No reports submitted yet.
-      </div>
-    ) : (
-      <div style={styles.list}>
-        {data.submitted_employees.map((name) => (
-          <div key={name} style={styles.row}>
-            <div>
-              <p style={styles.name}>{name}</p>
-              <p style={styles.sub}>Report received</p>
-            </div>
-
-            <span
-              style={{
-                ...styles.tag,
-                color: "#22d3ee",
-                background: "rgba(34,211,238,0.08)",
-              }}
-            >
-              Submitted
-            </span>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-
-        {/* Pending */}
-        <div style={styles.panel}>
-          <div style={styles.panelHeader}>
-            <div>
-              <h3 style={styles.panelTitle}>Pending Submissions</h3>
-              <p style={styles.panelSub}>
-                Employees who haven’t submitted today
-              </p>
-            </div>
-
-            <span style={styles.count}>
-              {data.missing_employees.length}
-            </span>
-          </div>
-
-          {data.missing_employees.length === 0 ? (
-            <div style={styles.success}>
-              All reports submitted for today.
-            </div>
-          ) : (
-            <div style={styles.list}>
-              {data.missing_employees.map((name) => (
-                <div key={name} style={styles.row}>
-                  <div>
-                    <p style={styles.name}>{name}</p>
-                    <p style={styles.sub}>Awaiting submission</p>
-                  </div>
-
-                  <span style={styles.tag}>Pending</span>
-                </div>
-              ))}
-            </div>
-          )}
+function Section({ title, sub, count, empty, items, tag, muted }) {
+  return (
+    <div style={styles.panel}>
+      <div style={styles.header}>
+        <div>
+          <h3 style={styles.panelTitle}>{title}</h3>
+          <p style={styles.panelSub}>{sub}</p>
         </div>
-      </AppLayout>
-    );
-  }
 
-  function Card({ title, value }) {
-    return (
-      <div style={styles.card}>
-        <p style={styles.cardTitle}>{title}</p>
-        <h2 style={styles.cardValue}>{value}</h2>
+        <span style={styles.count}>{count}</span>
       </div>
-    );
-  }
+
+      {items.length === 0 ? (
+        <div style={styles.empty}>{empty}</div>
+      ) : (
+        <div style={styles.list}>
+          {items.map((name) => (
+            <div key={name} style={styles.row}>
+              <div>
+                <p style={styles.name}>{name}</p>
+                <p style={styles.small}>
+                  {muted ? "Awaiting submission" : "Report received"}
+                </p>
+              </div>
+
+              <span style={muted ? styles.tagMuted : styles.tag}>
+                {tag}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const styles = {
+  page: {
+    paddingBottom: "50px",
+  },
+
   loading: {
     padding: "40px",
-    color: "#94a3b8",
+    color: "#8b8b8b",
+    fontSize: "15px",
   },
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
-    gap: "20px",
-    marginBottom: "24px",
+    gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+    gap: "24px",
+    marginBottom: "28px",
   },
 
   chartGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))",
-    gap: "20px",
-    marginBottom: "24px",
+    gridTemplateColumns: "repeat(auto-fit,minmax(430px,1fr))",
+    gap: "24px",
+    marginBottom: "28px",
   },
 
   card: {
-    padding: "22px",
-    borderRadius: "16px",
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.06)",
+    background: "#171717",
+    border: "1px solid #262626",
+    borderRadius: "24px",
+    padding: "30px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.24)",
   },
 
   cardTitle: {
     margin: 0,
     fontSize: "13px",
-    color: "#94a3b8",
-    marginBottom: "10px",
+    color: "#8d8d8d",
+    marginBottom: "14px",
+    letterSpacing: "0.3px",
   },
 
   cardValue: {
     margin: 0,
-    fontSize: "36px",
-    fontWeight: "600",
+    fontSize: "54px",
+    fontWeight: "800",
+    color: "#ffffff",
+    lineHeight: 1,
   },
 
   panel: {
-    padding: "24px",
-    borderRadius: "16px",
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.06)",
+    background: "#171717",
+    border: "1px solid #262626",
+    borderRadius: "24px",
+    padding: "30px",
     marginBottom: "24px",
+    boxShadow: "0 14px 34px rgba(0,0,0,0.22)",
   },
 
-  chartWrap: {
-    marginTop: "12px",
+  panelTitle: {
+    margin: 0,
+    fontSize: "22px",
+    fontWeight: "800",
+    color: "#ffffff",
+    letterSpacing: "-0.3px",
   },
 
-  panelHeader: {
+  panelSub: {
+    margin: "8px 0 20px",
+    fontSize: "13px",
+    color: "#8d8d8d",
+  },
+
+  tooltip: {
+    background: "#111111",
+    border: "1px solid #2a2a2a",
+    borderRadius: "14px",
+    color: "#ffffff",
+  },
+
+  header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "18px",
   },
 
-  panelTitle: {
-    margin: 0,
-    fontSize: "18px",
-    fontWeight: "600",
-  },
-
-  panelSub: {
-    margin: "4px 0 0 0",
-    fontSize: "13px",
-    color: "#94a3b8",
-  },
-
-  tooltip: {
-    background: "#0f172a",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "10px",
-    color: "white",
-    fontSize: "13px",
-  },
-
-  tooltipLabel: {
-    color: "#94a3b8",
-  },
-
   count: {
-    fontSize: "28px",
-    fontWeight: "600",
-    color: "#22d3ee",
+    fontSize: "42px",
+    fontWeight: "800",
+    color: "#e7dcc7",
   },
 
-  success: {
-    padding: "14px",
-    borderRadius: "10px",
-    background: "rgba(34,211,238,0.08)",
-    color: "#22d3ee",
+  empty: {
+    padding: "18px",
+    background: "#1e1e1e",
+    borderRadius: "16px",
     fontSize: "14px",
+    color: "#a1a1a1",
   },
 
   list: {
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
+    gap: "14px",
   },
 
   row: {
-    padding: "14px 16px",
-    borderRadius: "12px",
-    background: "rgba(255,255,255,0.03)",
+    padding: "18px",
+    border: "1px solid #262626",
+    borderRadius: "18px",
+    background: "#1d1d1d",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    border: "1px solid rgba(255,255,255,0.04)",
   },
 
   name: {
     margin: 0,
     fontSize: "15px",
-    fontWeight: "500",
+    fontWeight: "700",
+    color: "#ffffff",
   },
 
-  sub: {
-    margin: "4px 0 0 0",
+  small: {
+    margin: "5px 0 0",
     fontSize: "12px",
-    color: "#94a3b8",
+    color: "#8d8d8d",
   },
 
   tag: {
-    fontSize: "12px",
-    color: "#f87171",
-    background: "rgba(248,113,113,0.08)",
-    padding: "6px 10px",
+    background: "#e7dcc7",
+    color: "#111111",
+    padding: "8px 14px",
     borderRadius: "999px",
-    fontWeight: "500",
+    fontSize: "12px",
+    fontWeight: "700",
+  },
+
+  tagMuted: {
+    background: "#2a2a2a",
+    color: "#f5f5f5",
+    padding: "8px 14px",
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: "700",
   },
 };
 

@@ -5,15 +5,7 @@ import logo from "../assets/favicon.png";
 function AppLayout({ title, children, role }) {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-
   const profileRef = useRef();
-
-  const [glow, setGlow] = useState({
-    top: 0.03,
-    right: 0.03,
-    bottom: 0.03,
-    left: 0.03,
-  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,7 +17,7 @@ function AppLayout({ title, children, role }) {
 
   const user = {
     name: localStorage.getItem("username") || "User",
-    role: role,
+    role,
   };
 
   const isEmployeeSubPage =
@@ -33,26 +25,7 @@ function AppLayout({ title, children, role }) {
     (location.pathname === "/submit-report" ||
       location.pathname === "/my-reports");
 
-  const goBack = () => {
-    navigate("/employee-dashboard");
-  };
-
-  useEffect(() => {
-    const move = (e) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-
-      setGlow({
-        top: 0.02 + (1 - y) * 0.1,
-        bottom: 0.02 + y * 0.1,
-        left: 0.02 + (1 - x) * 0.1,
-        right: 0.02 + x * 0.1,
-      });
-    };
-
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, []);
+  const goBack = () => navigate("/employee-dashboard");
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -62,7 +35,8 @@ function AppLayout({ title, children, role }) {
     };
 
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    return () =>
+      document.removeEventListener("mousedown", handleClick);
   }, []);
 
   const navItems =
@@ -75,32 +49,15 @@ function AppLayout({ title, children, role }) {
         ];
 
   return (
-    <div
-      style={{
-        ...styles.page,
-        background: `
-          radial-gradient(140% 46% at 50% 0%, rgba(34,211,238,${
-            glow.top * 0.6
-          }), transparent 62%),
-          radial-gradient(140% 46% at 50% 100%, rgba(34,211,238,${
-            glow.bottom * 0.6
-          }), transparent 62%),
-          radial-gradient(46% 140% at 0% 50%, rgba(34,211,238,${
-            glow.left * 0.6
-          }), transparent 62%),
-          radial-gradient(46% 140% at 100% 50%, rgba(34,211,238,${
-            glow.right * 0.6
-          }), transparent 62%),
-          #020617
-        `,
-      }}
-    >
+    <div style={styles.page}>
       {open && <div style={styles.overlay} onClick={() => setOpen(false)} />}
 
       <aside
         style={{
           ...styles.sidebar,
-          transform: open ? "translateX(0)" : "translateX(-100%)",
+          transform: open
+            ? "translateX(0)"
+            : "translateX(-100%)",
         }}
       >
         <div style={styles.brandWrap}>
@@ -143,7 +100,7 @@ function AppLayout({ title, children, role }) {
             <div>
               <h1 style={styles.title}>{title}</h1>
               <p style={styles.sub}>
-                Smart workforce reporting system
+                Smart workforce reporting platform
               </p>
             </div>
           </div>
@@ -164,8 +121,8 @@ function AppLayout({ title, children, role }) {
                 <div style={styles.divider}></div>
 
                 <button
-                  onClick={logout}
                   style={styles.profileLogout}
+                  onClick={logout}
                 >
                   Logout
                 </button>
@@ -189,14 +146,16 @@ function AppLayout({ title, children, role }) {
 const styles = {
   page: {
     minHeight: "100vh",
-    color: "white",
+    background:
+      "radial-gradient(circle at top right, rgba(231,220,199,0.03), transparent 30%), #090909",
+    color: "#ffffff",
     fontFamily: "Inter, sans-serif",
   },
 
   overlay: {
     position: "fixed",
     inset: 0,
-    background: "rgba(0,0,0,0.45)",
+    background: "rgba(0,0,0,0.6)",
     zIndex: 900,
   },
 
@@ -204,26 +163,39 @@ const styles = {
     position: "fixed",
     top: 0,
     left: 0,
-    width: "250px",
+    width: "290px",
     height: "100%",
-    padding: "28px",
-    background: "rgba(15,23,42,0.95)",
-    backdropFilter: "blur(14px)",
-    borderRight: "1px solid rgba(255,255,255,0.06)",
-    transition: "transform 0.35s ease",
+    padding: "30px",
+    background: "#111111",
+    borderRight: "1px solid #232323",
+    transition: "transform 0.28s ease",
     zIndex: 1000,
+    display: "flex",
+    flexDirection: "column",
+  },
+
+  brandWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: "14px",
+    marginBottom: "40px",
+  },
+
+  sidebarLogo: {
+    width: "42px",
+    height: "42px",
   },
 
   logo: {
-    fontSize: "28px",
-    fontWeight: "700",
-    marginBottom: "6px",
+    margin: 0,
+    fontSize: "24px",
+    fontWeight: "800",
   },
 
   roleText: {
-    color: "#22d3ee",
-    fontSize: "14px",
-    marginBottom: "28px",
+    margin: "4px 0 0",
+    fontSize: "13px",
+    color: "#8d8d8d",
   },
 
   nav: {
@@ -233,73 +205,67 @@ const styles = {
   },
 
   link: {
-    color: "#cbd5e1",
     textDecoration: "none",
-    padding: "12px 14px",
-    borderRadius: "12px",
-    background: "rgba(255,255,255,0.03)",
+    color: "#f5f5f5",
+    padding: "14px 16px",
+    borderRadius: "14px",
+    background: "#171717",
+    border: "1px solid #262626",
+    fontWeight: "600",
   },
 
   logout: {
-    marginTop: "40px",
-    width: "100%",
-    padding: "12px",
-    borderRadius: "12px",
-    border: "none",
-    background: "#22d3ee",
-    color: "#0f172a",
+    marginTop: "auto",
+    padding: "14px",
+    borderRadius: "14px",
+    background: "#e7dcc7",
+    color: "#111",
     fontWeight: "700",
     cursor: "pointer",
   },
 
   main: {
-    padding: "30px",
+    padding: "34px 42px",
+    maxWidth: "1500px",
+    margin: "0 auto",
   },
 
   topbar: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    gap: "16px",
-    marginBottom: "10px",
+    alignItems: "flex-start",
+    marginBottom: "26px",
+    gap: "20px",
   },
 
   leftGroup: {
     display: "flex",
-    alignItems: "center",
-    gap: "14px",
+    alignItems: "flex-start",
+    gap: "18px",
   },
 
   menuBtn: {
     fontSize: "24px",
-    background: "rgba(255,255,255,0.06)",
-    color: "white",
-    border: "none",
-    borderRadius: "10px",
-    padding: "10px 14px",
+    background: "#141414",
+    color: "#e7dcc7",
+    border: "1px solid #272727",
+    borderRadius: "18px",
+    padding: "12px 16px",
     cursor: "pointer",
   },
 
   title: {
     margin: 0,
-    fontSize: "32px",
+    fontSize: "52px",
+    fontWeight: "900",
+    lineHeight: 1.05,
+    letterSpacing: "-1px",
   },
 
   sub: {
-    color: "#94a3b8",
-    marginTop: "4px",
-    fontSize: "14px",
-  },
-
-  backBelow: {
-    marginTop: "8px",
-    marginBottom: "18px",
-    background: "transparent",
-    border: "none",
-    color: "#94a3b8",
-    fontSize: "14px",
-    cursor: "pointer",
-    padding: 0,
+    margin: "10px 0 0 2px",
+    fontSize: "15px",
+    color: "#9f9f9f",
   },
 
   profileWrap: {
@@ -307,72 +273,69 @@ const styles = {
   },
 
   avatar: {
-    width: "38px",
-    height: "38px",
+    width: "56px",
+    height: "56px",
     borderRadius: "50%",
-    background: "rgba(34,211,238,0.12)",
-    color: "#22d3ee",
+    background: "#e7dcc7",
+    color: "#111",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontWeight: "600",
+    fontWeight: "800",
+    fontSize: "18px",
     cursor: "pointer",
+    boxShadow: "0 0 28px rgba(231,220,199,0.18)",
   },
 
   profileCard: {
     position: "absolute",
-    top: "50px",
+    top: "66px",
     right: 0,
-    width: "180px",
-    padding: "14px",
-    borderRadius: "12px",
-    background: "rgba(15,23,42,0.95)",
-    border: "1px solid rgba(255,255,255,0.06)",
-    backdropFilter: "blur(12px)",
+    width: "220px",
+    padding: "16px",
+    borderRadius: "18px",
+    background: "#161616",
+    border: "1px solid #2a2a2a",
     zIndex: 1000,
   },
 
   profileName: {
     margin: 0,
-    fontWeight: "600",
+    fontWeight: "700",
   },
 
   profileRole: {
-    margin: "4px 0 8px 0",
+    margin: "6px 0 12px",
     fontSize: "13px",
-    color: "#94a3b8",
+    color: "#8f8f8f",
   },
 
   divider: {
     height: "1px",
-    background: "rgba(255,255,255,0.06)",
-    margin: "8px 0",
+    background: "#262626",
+    marginBottom: "12px",
   },
 
   profileLogout: {
     width: "100%",
-    padding: "8px",
-    borderRadius: "8px",
-    border: "none",
-    background: "rgba(255,255,255,0.05)",
-    color: "white",
+    padding: "12px",
+    borderRadius: "14px",
+    background: "#e7dcc7",
+    color: "#111",
+    fontWeight: "700",
     cursor: "pointer",
   },
 
-  brandWrap: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    marginBottom: "15px",
-  },
-
-  sidebarLogo: {
-    width: "42px",
-    height: "42px",
-    objectFit: "contain",
-    marginBottom: "30px",
+  backBelow: {
+    marginBottom: "20px",
+    background: "transparent",
+    border: "none",
+    color: "#9ca3af",
+    cursor: "pointer",
+    padding: 0,
+    fontSize: "14px",
+    fontWeight: "600",
   },
 };
-
 
 export default AppLayout;
