@@ -22,8 +22,6 @@ function Login() {
 
       const data = await loginUser(username.trim(), password);
 
-      console.log("LOGIN RESPONSE:", data);
-
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
 
@@ -34,11 +32,12 @@ function Login() {
       }
     } catch (error) {
       console.error("LOGIN ERROR:", error);
-      console.error("SERVER:", error?.response?.data);
+      console.error("SERVER RESPONSE:", error?.response?.data);
 
       alert(
         error?.response?.data?.detail ||
-          "Login failed. Please try again."
+        error?.response?.data?.message ||
+        "Login failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -130,6 +129,7 @@ const styles = {
     padding: 24,
     background: "#050505",
   },
+
   card: {
     width: "100%",
     maxWidth: 470,
@@ -139,11 +139,36 @@ const styles = {
     border: "1px solid rgba(255,255,255,0.07)",
     color: "white",
   },
-  brandRow: { display: "flex", gap: 14, alignItems: "center" },
-  logo: { width: 54, height: 54 },
-  tag: { margin: 0, color: "#d6cbb5", fontSize: 13, fontWeight: 700 },
-  title: { margin: "4px 0 0", fontSize: 44, fontWeight: 800 },
-  sub: { color: "#94a3b8", lineHeight: 1.6 },
+
+  brandRow: {
+    display: "flex",
+    gap: 14,
+    alignItems: "center",
+  },
+
+  logo: {
+    width: 54,
+    height: 54,
+  },
+
+  tag: {
+    margin: 0,
+    color: "#d6cbb5",
+    fontSize: 13,
+    fontWeight: 700,
+  },
+
+  title: {
+    margin: "4px 0 0",
+    fontSize: 44,
+    fontWeight: 800,
+  },
+
+  sub: {
+    color: "#94a3b8",
+    lineHeight: 1.6,
+  },
+
   input: {
     width: "100%",
     padding: 15,
@@ -153,6 +178,7 @@ const styles = {
     background: "rgba(255,255,255,0.03)",
     color: "white",
   },
+
   button: {
     width: "100%",
     padding: 15,
@@ -162,13 +188,20 @@ const styles = {
     fontWeight: 800,
     cursor: "pointer",
   },
+
   demoBox: {
     marginTop: 24,
     padding: 18,
     borderRadius: 18,
     background: "rgba(255,255,255,0.025)",
   },
-  demoTitle: { color: "#d6cbb5", fontWeight: 700, fontSize: 13 },
+
+  demoTitle: {
+    color: "#d6cbb5",
+    fontWeight: 700,
+    fontSize: 13,
+  },
+
   demoRow: {
     display: "flex",
     justifyContent: "space-between",
@@ -176,12 +209,23 @@ const styles = {
     marginBottom: 14,
     borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
+
   demoRowLast: {
     display: "flex",
     justifyContent: "space-between",
   },
-  role: { margin: 0, fontWeight: 700 },
-  cred: { margin: "4px 0 0", color: "#94a3b8", fontSize: 13 },
+
+  role: {
+    margin: 0,
+    fontWeight: 700,
+  },
+
+  cred: {
+    margin: "4px 0 0",
+    color: "#94a3b8",
+    fontSize: 13,
+  },
+
   demoBtn: {
     padding: "10px 16px",
     borderRadius: 12,
